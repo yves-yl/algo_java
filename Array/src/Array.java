@@ -27,24 +27,102 @@ public class Array<E> {
 
     }
 
+    public boolean contains(E e){
+        for(int i = 0; i < size; ++i){
+            if(e == data[i])
+                return true;
+        }
 
-    public void addLast(E e){
+        return  false;
+    }
 
-        if(size == data.length)
-            throw  new IllegalArgumentException("Array::addLast failed,Array is full");
+    public int find(E e){
 
-        data[size] =e;
-        ++size;
+        for(int i = 0; i < size; ++i){
+            if(e == data[i])
+                return i;
+        }
+
+        return  -1;
+
+    }
+
+    public E remove(int index){
+
+        if(index < 0 || index >= size)
+            throw  new IllegalArgumentException("Array::remove failed,index is illegal");
+
+        E e = data[index];
+        for (int i = index; i < size-1; ++i){
+
+            data[i] = data[i+1];
+        }
+
+        --size;
+        if ( size == data.length/4 && size/2 != 0){
+            resize(size/2);
+        }
+        return e;
+    }
+
+    public E removeFirst(){
+
+        return remove(0);
+
+    }
+    public E removeLast(){
+
+        return remove(size-1);
+
+    }
+
+    public void removeElement(E e){
+
+        int index = find(e);
+        if(-1 != index)
+            remove(index);
+
+
+
+    }
+
+    public E get(int index){
+
+        if(index < 0 || index >= size)
+            throw  new IllegalArgumentException("Array::get failed,index is illegal");
+
+        return data[index];
+    }
+
+    public void set(int index,E e){
+
+        if(index < 0 || index >= size)
+            throw  new IllegalArgumentException("Array::get failed,index is illegal");
+
+         data[index] = e;
+    }
+
+
+    private void resize(int newCap){
+
+        E[] newData = (E[]) (new Object[newCap]);
+        for(int i =0;i< size;++i){
+            newData[i] = data[i];
+        }
+
+        data = newData;
 
     }
 
     public void add(int index, E e){
 
-        if(size == data.length)
-            throw  new IllegalArgumentException("Array::add failed,Array is full");
+
         if(index < 0 || index > data.length)
             throw  new IllegalArgumentException("Array::add failed,index is illegal");
+        if(size == data.length){
 
+            resize(2 * data.length);
+        }
 
         for(int i = size-1;i >= index;--i){
 
@@ -54,9 +132,21 @@ public class Array<E> {
         ++size;
         data[index] = e;
 
+    }
+    public void addFirst(E e){
 
+        add(0,e);
 
     }
+
+    public void addLast(E e){
+
+        add(size,e);
+
+    }
+
+
+
 
 
     @Override
